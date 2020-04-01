@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,7 +33,7 @@ public class Game implements Runnable {
     private Thread thread;          // thread to create the game
     private boolean running;        // to set the game
     private Ball ball;              // to use a player
-    private Canasta basket;
+    private LinkedList<Bricks> brick;
     private KeyManager keyManager;  // to manage the keyboard
     private MouseManager mouseManager;
     private Timer timer;
@@ -68,7 +69,7 @@ public class Game implements Runnable {
     }
 
     /**
-     * 
+     *
      * @return ball
      */
     public Ball getBall() {
@@ -78,8 +79,8 @@ public class Game implements Runnable {
     public int getVidas() {
         return vidas;
     }
-     
-    public MouseManager getMouseManager(){
+
+    public MouseManager getMouseManager() {
         return mouseManager;
     }
 
@@ -100,23 +101,29 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
-    
+
     public void setVidas(int vidas) {
         this.vidas = vidas;
     }
 
-        public void setCounterVidas(int counterVidas) {
+    public void setCounterVidas(int counterVidas) {
         this.counterVidas = counterVidas;
     }
-        
+
     /**
      * initializing the display window of the game
      */
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        ball = new Ball(getWidth()/2, getHeight()/2, 1, 70, 70, this,1);
-        basket = new Canasta(getWidth() - 200, getHeight() - 200, 210, 200, this);
+        ball = new Ball(getWidth() / 2, getHeight() / 2, 1, 70, 70, this, 1);
+        brick = new LinkedList<Bricks>();
+        for (int row = 0; row < 6; row++) {
+            for (int column = 1; column < 7; column++) {
+                Bricks brickAux = new Bricks(50 * column, row * 50, 50, 50, this);
+                brick.add(brickAux);
+            }
+        }
         display.getJframe().addKeyListener(keyManager);
         display.getJframe().addMouseListener(mouseManager);
         display.getJframe().addMouseMotionListener(mouseManager);
@@ -149,14 +156,13 @@ public class Game implements Runnable {
 
             // if delta is positive we tick the game
             if (delta >= 1) {
-                if(keyManager.isPaused()){
-                    if(vidas != 0){
+                if (keyManager.isPaused()) {
                         tick();
-                    }
+                    
                 }
                 render();
                 delta--;
-                
+
             }
         }
         stop();
@@ -168,37 +174,28 @@ public class Game implements Runnable {
 
     private void tick() {
         keyManager.tick();
-        ball.tick();
-        basket.tick();
-        if(ball.getX() >= basket.getX() && ball.getX() <= basket.getX()+basket.getWidth() && 
-                ball.getY() < basket.getY()+40){
-            score += 10;
-            ball.setControl(false);
-            ball.setBarrier(300);
-            ball.setX(getWidth()/2);
-            ball.setY(getHeight()/2);
-            scoreSound();
-            basket.setX((int)(Math.random()*((width-210)-300+1)+300));
+        for(Bricks b : brick){
+            b.tick();
         }
-        if(counterVidas == 3){
+        if (counterVidas == 3) {
             vidas--;
             counterVidas = 0;
         }
-        
-        if(score % 50 == 0 && score != 0 && !vidaAsignada){
+
+        if (score % 50 == 0 && score != 0 && !vidaAsignada) {
             extraVida = true;
         }
-        
-        if(extraVida){
+
+        if (extraVida) {
             vidas++;
             extraVida = false;
             vidaAsignada = true;
         }
-        
-        if(score % 50 != 0){
+
+        if (score % 50 != 0) {
             vidaAsignada = false;
         }
-        
+
     }
 
     private void render() {
@@ -214,33 +211,28 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
-            g.drawImage(Assets.background, 0, 0, width, height, null);
-            g.drawImage(Assets.building, 0, 0, 300, height, null);
-            ball.render(g);
-            basket.render(g);
-            g.setFont( new Font( "Tahoma", Font.BOLD, 20 ) );
-            g.setColor(Color.GREEN);
-            g.drawString("Vidas: " + String.valueOf(vidas) , 30, 30);
-            g.drawString("Score: " + String.valueOf(score) , 30, 50);
-            g.setColor(Color.red);
-            g.drawString("Launch Zone",  50, height-20);
-            if(!keyManager.isPaused()){
-                g.drawImage(Assets.pause, 0, 0, width, height, null);
+            g.drawImage(Assets.background, 0, 0, width, height - 50, null);
+            g.drawImage(Assets.littleBar, 0, height-50, width, 50, null);
+            for(Bricks b: brick){
+                b.render(g);
             }
-            if(vidas == 0){
-                g.drawImage(Assets.gameOver, 0, 0, width, height, null);
-                Assets.music.stop();    
+            g.setFont(new Font("Tahoma", Font.BOLD, 20));
+            g.setColor(Color.GREEN);
+            g.drawString("Vidas: " + String.valueOf(vidas), 10, height-10);
+            g.drawString("Score: " + String.valueOf(score), 10, height-30);
+            if (!keyManager.isPaused()) {
+                g.drawImage(Assets.pause, 0, 0, width, height, null);
             }
             bs.show();
             g.dispose();
         }
 
     }
-    
-    public void scoreSound(){
+
+    public void scoreSound() {
         Assets.score.play();
     }
-    
+
     /**
      * setting the thead for the game
      */
@@ -265,7 +257,7 @@ public class Game implements Runnable {
             }
         }
     }
-    
+
     public void Save(String strFileName) {
 
         try {
@@ -283,7 +275,6 @@ public class Game implements Runnable {
     }
 
     //Save Enemies
-
     public void Load(String strFileName) {
         try {
             FileReader file = new FileReader(strFileName);
@@ -307,5 +298,3 @@ public class Game implements Runnable {
     }
 
 }
-
-

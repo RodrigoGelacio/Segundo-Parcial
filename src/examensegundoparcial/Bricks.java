@@ -15,23 +15,19 @@ import java.awt.Graphics;
  *
  * @author Locon
  */
-public class Canasta extends Item {
+public class Bricks extends Item {
 
     private int direction;
     private int width;
     private int height;
-    private boolean isBumpingWall = false;  // Booleano para saber si choco con la pared
-    int frames = 0;                         // variable para contar frames
     private Game game;
-    private Animation animationPortal;
 
-    public Canasta(int x, int y, int width, int height, Game game) {
+    public Bricks(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.direction = direction;
         this.width = width;
         this.height = height;
         this.game = game;
-        this.animationPortal = new Animation(Assets.portal, 150);
         
     }
 
@@ -64,13 +60,12 @@ public class Canasta extends Item {
      */
     @Override
     public void tick() {
-        this.animationPortal.tick();
         
     }
 
     @Override
     public void render(Graphics g) {
-            g.drawImage(animationPortal.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.brick, getX(), getY(), getWidth(), getHeight(), null);
         
     }
 
