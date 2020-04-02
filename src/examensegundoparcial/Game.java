@@ -116,7 +116,7 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        bar = new Bar(getWidth() / 2, getHeight() - 70, 70, 70, this);
+        bar = new Bar(getWidth() / 2, getHeight() -120, 70, 70, this);
         brick = new LinkedList<Bricks>();
         for (int row = 0; row < 6; row++) {
             for (int column = 1; column < 7; column++) {
