@@ -5,7 +5,6 @@ package examensegundoparcial;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -17,6 +16,8 @@ public class KeyManager implements KeyListener {
 
     public boolean paused; // flag pause the game
     public boolean save;
+    public boolean right;
+    public boolean left;
     private Game game;
 
     private boolean keys[];  // to store all the flags for every key
@@ -31,7 +32,6 @@ public class KeyManager implements KeyListener {
         return paused;
     }
 
-    
     @Override
 
     public void keyTyped(KeyEvent e) {
@@ -47,10 +47,10 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         keys[e.getKeyCode()] = true;
-        if(e.getKeyCode() == KeyEvent.VK_S){
+        if (e.getKeyCode() == KeyEvent.VK_S) {
             game.Save("game");
         }
-        if(e.getKeyCode() == KeyEvent.VK_C){
+        if (e.getKeyCode() == KeyEvent.VK_C) {
             game.Load("game");
         }
     }
@@ -60,20 +60,21 @@ public class KeyManager implements KeyListener {
      *
      * @param char
      */
-
     @Override
     public void keyReleased(KeyEvent e) {
         // set false to every key released
-         keys[e.getKeyCode()] = false;
-         if(e.getKeyCode() == KeyEvent.VK_P){
-             paused = !paused;
-         }
-         
+        keys[e.getKeyCode()] = false;
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            paused = !paused;
+        }
+
     }
 
     /**
      * to enable or disable moves on every tick
      */
     public void tick() {
+        left = keys[KeyEvent.VK_LEFT];
+        right = keys[KeyEvent.VK_RIGHT];
     }
 }

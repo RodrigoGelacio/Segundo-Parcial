@@ -52,7 +52,7 @@ public class Ball extends Item {
         enter = 0;
         frames = 0;
         rotationNumber = 1;
-        this.animationRotation1 = new Animation(Assets.rotation1, 100);
+       // this.animationRotation1 = new Animation(Assets.rotation1, 100);
     }
 
     public void setBarrier(int barrier) {

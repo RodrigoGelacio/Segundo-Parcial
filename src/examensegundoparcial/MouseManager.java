@@ -86,20 +86,12 @@ public class MouseManager implements MouseListener, MouseMotionListener{
         
             x = e.getX();
             y = e.getY();
-        
-        if(x >= game.getBall().getX() && x <= game.getBall().getX()+50
-                && y >= game.getBall().getY() && y <= game.getBall().getY()+50 && SwingUtilities.isLeftMouseButton(e)){
-            izquierdo = true;
-            x = e.getX();
-            y = e.getY();
         }
          
          
-    }
     
     @Override
     public void mouseMoved(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
 
