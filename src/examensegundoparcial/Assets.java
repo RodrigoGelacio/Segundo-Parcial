@@ -16,6 +16,7 @@ public class Assets {
     public static BufferedImage background;
     public static BufferedImage brick;     // to store the player image
     public static BufferedImage sprite;
+    public static BufferedImage sprite2;
     public static BufferedImage littleBar;
     public static BufferedImage pause;
     public static BufferedImage gameOver;
@@ -23,6 +24,7 @@ public class Assets {
     public static BufferedImage barIdle[];
     public static BufferedImage barRight[];
     public static BufferedImage barLeft[];
+    public static BufferedImage personIdle[];
     public static SoundClip score;
     public static SoundClip music;
     
@@ -39,15 +41,23 @@ public static BufferedImage portal[];
         pause = ImageLoader.loadImage("/images/pause.jpg");
         gameOver = ImageLoader.loadImage("/images/gameover.jpg");
         sprite = ImageLoader.loadImage("/images/bat.png");
+        sprite2 = ImageLoader.loadImage("/images/guy.png");
         Spritesheet spritesheet = new Spritesheet(sprite);
+        Spritesheet spritesheet2 = new Spritesheet(sprite2);
         barIdle = new BufferedImage[4];
         barRight = new BufferedImage[4];
         barLeft = new BufferedImage[4];
+        personIdle = new BufferedImage[4];
          
         for(int i=0; i < 4; i++){
             barIdle[i] = spritesheet.crop(i * 32, 0, 32, 32);
             barRight[i] = spritesheet.crop(i * 32, 32, 32, 32);
             barLeft[i] = spritesheet.crop(i * 32, 96, 32, 32);
+            personIdle[i] = spritesheet2.crop(i * 16, 0, 16, 24);
+        }
+        
+        for(int i = 0; i < 9; i++){
+
         }
     }
     

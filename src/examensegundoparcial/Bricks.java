@@ -21,6 +21,7 @@ public class Bricks extends Item {
     private int width;
     private int height;
     private Game game;
+    private Animation personIdle;
 
     public Bricks(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
@@ -28,6 +29,7 @@ public class Bricks extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
+        this.personIdle = new Animation(Assets.personIdle, 100);
         
     }
 
@@ -60,13 +62,13 @@ public class Bricks extends Item {
      */
     @Override
     public void tick() {
-        
+        personIdle.tick();
     }
 
     @Override
     public void render(Graphics g) {
-            g.drawImage(Assets.brick, getX(), getY(), getWidth(), getHeight(), null);
-        
+           // g.drawImage(Assets.brick, getX(), getY(), getWidth(), getHeight(), null);
+           g.drawImage(personIdle.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
 }
