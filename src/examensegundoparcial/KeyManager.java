@@ -47,7 +47,7 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         keys[e.getKeyCode()] = true;
-        if (e.getKeyCode() == KeyEvent.VK_S) {
+        if (e.getKeyCode() == KeyEvent.VK_G) {
             game.Save("game");
         }
         if (e.getKeyCode() == KeyEvent.VK_C) {

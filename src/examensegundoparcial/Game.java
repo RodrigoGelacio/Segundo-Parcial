@@ -118,7 +118,7 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        bar = new Bar(getWidth() / 2, getHeight() -120, 100, 70, this);
+        bar = new Bar(getWidth() / 2 - 50, getHeight() -120, 100, 70, this);
         ball = new Ball(getWidth() / 2, 400, 20, 20, this);
         brick = new LinkedList<Bricks>();
         for (int row = 0; row < 6; row++) { 
@@ -180,6 +180,7 @@ public class Game implements Runnable {
     }
 
     private void tick() {
+        if(vidas != 0){
         keyManager.tick();
         bar.tick();
         ball.tick();
@@ -280,7 +281,7 @@ public class Game implements Runnable {
         if (score % 50 != 0) {
             vidaAsignada = false;
         }
-
+        }
     }
 
     private void render() {
@@ -312,6 +313,10 @@ public class Game implements Runnable {
             g.drawString("Score: " + String.valueOf(score), 10, height-30);
             if (!keyManager.isPaused()) {
                 g.drawImage(Assets.pause, 0, 0, width, height, null);
+            }
+            if (vidas == 0) {
+                g.drawImage(Assets.gameOver, 0, 0, width, height, null);    // If no more lives are left, displays game over screen
+                Assets.music.stop();                                        // Stops the music
             }
             bs.show();
             g.dispose();
@@ -352,10 +357,12 @@ public class Game implements Runnable {
 
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(strFileName));
-            int x = bar.getX();
-            int y = bar.getY();
+            int xP = bar.getX();
+            int yP = bar.getY();
+            int xB = ball.getX();
+            int yB = ball.getY();
             //save player data
-            writer.println("" + vidas + "/" + score + "/" + x + "/" + y);
+            writer.println("" + vidas + "/" + score + "/" + xP + "/" + yP + "/" + xB + "/" + yB); 
             writer.close();
 
         } catch (IOException ioe) {
@@ -375,12 +382,15 @@ public class Game implements Runnable {
             datos = line.split("/");
             vidas = Integer.parseInt(datos[0]);
             score = Integer.parseInt(datos[1]);
-            //Load Player
-            int x = Integer.parseInt(datos[2]);
-            int y = Integer.parseInt(datos[3]);
-            System.out.println("Se leyo  vidas = " + vidas + " y score = " + score + " y X = " + x + " y Y = " + y);
-            bar.setX(x);
-            bar.setY(y);
+            int xP = Integer.parseInt(datos[2]);
+            int yP = Integer.parseInt(datos[3]);
+            int xB = Integer.parseInt(datos[4]);
+            int yB = Integer.parseInt(datos[5]);
+            System.out.println("Se leyo  vidas = " + vidas + " y score = " + score + " y X = " + xP + " y Y = " + yP);
+            bar.setX(xP);
+            bar.setY(yP);
+            ball.setX(xB);
+            ball.setY(yB);
             reader.close();
         } catch (IOException e) {
             System.out.println("File Not found CALL 911");
