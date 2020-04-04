@@ -29,13 +29,15 @@ public class Assets {
     public static BufferedImage personIdle[];
     public static SoundClip score;
     public static SoundClip music;
+    public static SoundClip pop;
     
 public static BufferedImage portal[];
     /**
      * initializing the images of the game
      */
     public static void init() {
-        music = new SoundClip("/sounds/guitarMusic.wav");
+        pop = new SoundClip("/sounds/pop.wav");
+        music = new SoundClip("/sounds/backSound.wav");
         ball = ImageLoader.loadImage("/images/ball.png");
         littleBar = ImageLoader.loadImage("/images/littleBar.jpg");
         score = new SoundClip("/sounds/score.wav");

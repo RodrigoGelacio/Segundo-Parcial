@@ -134,6 +134,10 @@ public class Game implements Runnable {
         Assets.music.setLooping(true);
         Assets.music.play();
     }
+    
+    public void pop(){
+        Assets.pop.play();
+    }
 
     @Override
     public void run() {
@@ -180,6 +184,7 @@ public class Game implements Runnable {
         ball.tick();
         if(bar.collision(ball)){
             ball.setyVelocity(-ball.getyVelocity());
+            pop();
         }
         for(int i=0; i < brick.size();i++){
             brick.get(i).tick();
