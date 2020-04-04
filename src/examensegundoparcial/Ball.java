@@ -61,6 +61,7 @@ public class Ball extends Item {
         if(getY() + 30 == game.getHeight() - 50){
             setX(game.getWidth() / 2);
             setY(game.getHeight() / 2);
+            xVelocity = 0;
             game.setVidas(game.getVidas() - 1);
         }
         else if(getY() == 0){

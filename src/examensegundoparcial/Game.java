@@ -42,6 +42,8 @@ public class Game implements Runnable {
     private int counterVidas; //counter of lives
     private boolean extraVida; //bonus lives
     private boolean vidaAsignada; 
+    private MouseManager mouseManager;
+    private int blocksNum = 36;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -191,7 +193,7 @@ public class Game implements Runnable {
     }
 
     private void tick() {
-        if(vidas != 0){
+        if(vidas != 0 && blocksNum != 0){
         keyManager.tick();
         bar.tick();
         ball.tick();
@@ -279,6 +281,9 @@ public class Game implements Runnable {
                     }
 
                     b.setDestroyed(true); // sets the brick destroyed
+                    scoreSound();
+                    score += 20;
+                    blocksNum--;
                 }
             }
         }
@@ -289,7 +294,7 @@ public class Game implements Runnable {
             counterVidas = 0;
         }
 
-        if (score % 50 == 0 && score != 0 && !vidaAsignada) {
+        if (score % 120 == 0 && score != 0 && !vidaAsignada) {
             extraVida = true;
         }
 
@@ -299,7 +304,7 @@ public class Game implements Runnable {
             vidaAsignada = true;
         }
 
-        if (score % 50 != 0) {
+        if (score % 120 != 0) {
             vidaAsignada = false;
         }
         }
@@ -337,6 +342,10 @@ public class Game implements Runnable {
             }
             if (vidas == 0) {
                 g.drawImage(Assets.gameOver, 0, 0, width, height, null);    // If no more lives are left, displays game over screen
+                Assets.music.stop();                                        // Stops the music
+            }
+             if (blocksNum == 0) {
+                g.drawImage(Assets.win, 0, 0, width, height, null);    // If no more lives are left, displays game over screen
                 Assets.music.stop();                                        // Stops the music
             }
             bs.show();
@@ -387,8 +396,10 @@ public class Game implements Runnable {
             int yP = bar.getY();
             int xB = ball.getX();
             int yB = ball.getY();
+            int xVelP = ball.getxVelocity();
+            int yVelP = ball.getyVelocity();
             //save player data
-            writer.println("" + vidas + "/" + score + "/" + xP + "/" + yP + "/" + xB + "/" + yB); 
+            writer.println("" + vidas + "/" + score + "/" + xP + "/" + yP + "/" + xB + "/" + yB + "/" + xVelP + "/" + yVelP); 
             writer.close();
 
         } catch (IOException ioe) {
@@ -412,11 +423,15 @@ public class Game implements Runnable {
             int yP = Integer.parseInt(datos[3]);
             int xB = Integer.parseInt(datos[4]);
             int yB = Integer.parseInt(datos[5]);
+            int xVelP = Integer.parseInt(datos[6]);
+            int yVelP = Integer.parseInt(datos[7]);
             System.out.println("Se leyo  vidas = " + vidas + " y score = " + score + " y X = " + xP + " y Y = " + yP);
             bar.setX(xP);
             bar.setY(yP);
             ball.setX(xB);
             ball.setY(yB);
+            ball.setxVelocity(xVelP);
+            ball.setyVelocity(yVelP);
             reader.close();
         } catch (IOException e) {
             System.out.println("File Not found CALL 911");
