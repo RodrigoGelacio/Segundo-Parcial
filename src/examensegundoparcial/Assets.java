@@ -5,7 +5,6 @@ package examensegundoparcial;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.awt.image.BufferedImage;
 
 /**
@@ -13,6 +12,7 @@ import java.awt.image.BufferedImage;
  * @author antoniomejorado
  */
 public class Assets {
+
     public static BufferedImage background;
     public static BufferedImage brick;     // to store the player image
     public static BufferedImage spriteBat;
@@ -31,8 +31,9 @@ public class Assets {
     public static SoundClip score;
     public static SoundClip music;
     public static SoundClip pop;
-    
-public static BufferedImage portal[];
+
+    public static BufferedImage portal[];
+
     /**
      * initializing the images of the game
      */
@@ -56,19 +57,17 @@ public static BufferedImage portal[];
         barRight = new BufferedImage[4];
         barLeft = new BufferedImage[4];
         personIdle = new BufferedImage[4];
-         
-        for(int i=0; i < 4; i++){
+
+        for (int i = 0; i < 4; i++) {
             barIdle[i] = spritesheet.crop(i * 32, 0, 32, 32);
             barRight[i] = spritesheet.crop(i * 32, 32, 32, 32);
             barLeft[i] = spritesheet.crop(i * 32, 96, 32, 32);
             personIdle[i] = spritesheet2.crop(i * 16, 0, 16, 24);
         }
-        
-        for(int i = 0; i < 9; i++){
+
+        for (int i = 0; i < 9; i++) {
 
         }
     }
-    
+
 }
-
-

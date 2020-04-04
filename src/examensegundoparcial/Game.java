@@ -41,9 +41,9 @@ public class Game implements Runnable {
     private int vidas; // lives of the game
     private int counterVidas; //counter of lives
     private boolean extraVida; //bonus lives
-    private boolean vidaAsignada; 
+    private boolean vidaAsignada; // to know if a life has been given already or not
     private Power power;
-    private int blocksNum = 36;
+    private int blocksNum = 36; // To store the number of blocks to trigger the win
 
     /**
      * to create title, width and height and set the game is still not running
@@ -63,9 +63,9 @@ public class Game implements Runnable {
         extraVida = false;
         vidaAsignada = false;
     }
-    
+
     /**
-     * 
+     *
      * @return contador de vidas
      */
     public int getCounterVidas() {
@@ -83,15 +83,14 @@ public class Game implements Runnable {
     public Power getPower() {
         return power;
     }
-    
+
     /**
-     * 
+     *
      * @return vidas
      */
     public int getVidas() {
         return vidas;
     }
-
 
     /**
      * To get the width of the game window
@@ -110,25 +109,19 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
-    
+
     /**
-     * 
-     * @param vidas 
-     * Modify value of lives
+     *
+     * @param vidas Modify value of lives
      */
     public void setVidas(int vidas) {
         this.vidas = vidas;
     }
-    
-    /**
-     * 
-     * @param counterVidas
-     * Modify counter of lives
-     */
-    public void setCounterVidas(int counterVidas) {
-        this.counterVidas = counterVidas;
-    }
 
+    /**
+     * Modify value of power
+     * @param power 
+     */
     public void setPower(Power power) {
         this.power = power;
     }
@@ -139,12 +132,12 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        bar = new Bar(getWidth() / 2 - 50, getHeight() -120, 100, 70, this);
+        bar = new Bar(getWidth() / 2 - 50, getHeight() - 120, 100, 70, this);
         ball = new Ball(getWidth() / 2, 400, 20, 20, this);
         brick = new LinkedList<Bricks>();
-        
+
         //loading position of the bricks in the screen
-        for (int row = 0; row < 6; row++) { 
+        for (int row = 0; row < 6; row++) {
             for (int column = 2; column < 8; column++) {
                 Bricks brickAux = new Bricks(50 * column, row * 50, 50, 50, this);
                 brick.add(brickAux);
@@ -154,11 +147,11 @@ public class Game implements Runnable {
         Assets.music.setLooping(true);
         Assets.music.play();
     }
-    
+
     /**
      * Method that plays the sound when the ball hits the bar
      */
-    public void pop(){
+    public void pop() {
         Assets.pop.play();
     }
 
@@ -186,7 +179,7 @@ public class Game implements Runnable {
             // if delta is positive we tick the game
             if (delta >= 1) {
                 if (keyManager.isPaused()) { //checks if the game is on pause
-                        tick();
+                    tick();
                 }
                 render();
                 delta--;
@@ -201,124 +194,118 @@ public class Game implements Runnable {
     }
 
     private void tick() {
-        if(vidas != 0 && blocksNum != 0){
-        keyManager.tick();
-        bar.tick();
-        ball.tick();
-        
-        //checks if the ball has collisiones with the bar
-        if(bar.collision(ball)){
-            pop(); //plays bo sound
-            
-            int paddleLPos = bar.getX();
-            int ballLPos = ball.getX();
-            
-            int first = paddleLPos + 20;
-            int second = paddleLPos + 40;
-            int third = paddleLPos + 60;
-            int fourth = paddleLPos + 80;
-            
-            //modifies the direction of the ball if it lands in the first section of the bar
-            if (ballLPos < first) {
+        if (vidas != 0 && blocksNum != 0) {
+            keyManager.tick();
+            bar.tick();
+            ball.tick();
 
-                ball.setxVelocity(-2);
-                ball.setyVelocity(-2);
+            //checks if the ball has collisiones with the bar
+            if (bar.collision(ball)) {
+                pop(); //plays pop sound when ball collides with bar
+
+                int paddleLPos = bar.getX();
+                int ballLPos = ball.getX();
+
+                int first = paddleLPos + 20;
+                int second = paddleLPos + 40;
+                int third = paddleLPos + 60;
+                int fourth = paddleLPos + 80;
+
+                //modifies the direction of the ball if it lands in the first section of the bar
+                if (ballLPos < first) {
+
+                    ball.setxVelocity(-2);
+                    ball.setyVelocity(-2);
+                }
+
+                //modifies the direction of the ball if it lands in the second section of the bar
+                if (ballLPos >= first && ballLPos < second) {
+
+                    ball.setxVelocity(-2);
+                    ball.setyVelocity(-2);
+                }
+
+                //modifies the direction of the ball if it lands in the third section of the bar
+                if (ballLPos >= second && ballLPos < third) {
+
+                    ball.setxVelocity(0);   //modifies ball's xVelocity
+                    ball.setyVelocity(-2);  //modifies ball's yVelocity
+                }
+
+                //modifies the direction of the ball if it lands in the fourth section of the bar
+                if (ballLPos >= third && ballLPos < fourth) {
+
+                    ball.setxVelocity(2);
+                    ball.setyVelocity(-2);
+                }
+
+                //modifies the direction of the ball if it lands in the last section of the bar
+                if (ballLPos > fourth) {
+                    ball.setxVelocity(2);   //modifies ball's xVelocity
+                    ball.setyVelocity(-2);  //modifies ball's yVelocity
+                }
+
             }
 
-            //modifies the direction of the ball if it lands in the second section of the bar
-            if (ballLPos >= first && ballLPos < second) {
+            //updates the bricks status
+            for (int i = 0; i < brick.size(); i++) {
+                Bricks b = (Bricks) brick.get(i); //saving in a new object in order to function properly
+                b.tick();
 
-                ball.setxVelocity(-2);
-                ball.setyVelocity(-2);
-            }
-            
-            //modifies the direction of the ball if it lands in the third section of the bar
-            if (ballLPos >= second && ballLPos < third) {
+                //checks if the ball has hit a brick
+                if (b.collision3(ball)) {
+                    int ballLeft = ball.getX(); // saves the x value of the ball at all moments
+                    int ballHeight = ball.getHeight(); // saves the height of the ball
+                    int ballWidth = (int) ball.getWidth(); // saves width of the ball
+                    int ballTop = (int) ball.getY(); // saves the y position at all times
 
-                ball.setxVelocity(0);
-                ball.setyVelocity(-2);
-            }
+                    //creates a Point object for evry corner of the ball
+                    Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+                    Point pointLeft = new Point(ballLeft - 1, ballTop);
+                    Point pointTop = new Point(ballLeft, ballTop - 1);
+                    Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
 
-            //modifies the direction of the ball if it lands in the fourth section of the bar
-            if (ballLPos >= third && ballLPos < fourth) {
-                
-                ball.setxVelocity(2);
-                ball.setyVelocity(-2);
-            }
-            
-            //modifies the direction of the ball if it lands in the last section of the bar
-            if (ballLPos > fourth) {
-                ball.setxVelocity(2);
-                ball.setyVelocity(-2);
-            }
-            
-        }
-        
-        //updates the bricks status
-        for(int i=0; i < brick.size();i++){
-            Bricks b = (Bricks) brick.get(i); //saving in a new object in order to function properly
-            b.tick();
-            
-            //checks if the ball has hit a brick
-            if (b.collision3(ball)) { 
-                int ballLeft = ball.getX(); // saves the x value of the ball at all moments
-                int ballHeight = ball.getHeight(); // saves the height of the ball
-                int ballWidth = (int) ball.getWidth(); // saves width of the ball
-                int ballTop = (int) ball.getY(); // saves the y position at all times
-                
-                //creates a Point object for evry corner of the ball
-                Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
-                Point pointLeft = new Point(ballLeft - 1, ballTop);
-                Point pointTop = new Point(ballLeft, ballTop - 1);
-                Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
-                
-                //checks if the brick has already been destroyed
-                if (!b.isDestroyed()) {
-                    
-                    //Uses a different collisioin to know where has the ball hit the brick
-                    if (b.collision2(ball,pointRight)) {
-                        ball.setxVelocity(-2);
-                    } else if (b.collision2(ball,pointLeft)) {
-                        ball.setxVelocity(2);
+                    //checks if the brick has already been destroyed
+                    if (!b.isDestroyed()) {
+
+                        //Uses a different collisioin to know where has the ball hit the brick
+                        if (b.collision2(ball, pointRight)) {
+                            ball.setxVelocity(-2);
+                        } else if (b.collision2(ball, pointLeft)) {
+                            ball.setxVelocity(2);
+                        }
+
+                        if (b.collision2(ball, pointTop)) {
+                            ball.setyVelocity(2);
+                        } else if (b.collision2(ball, pointBottom)) {
+                            ball.setyVelocity(-2);
+                        }
+
+                        if (Math.floor(Math.random() * 5) == 0) {
+                            setPower(new Power(b.getX() + 15, b.getY() + 15, 30, 30, this));
+                        }
+                        b.setDestroyed(true);   //sets the brick destroyed
+                        scoreSound();           //plays scoring sound
+                        score += 20;            //updates score
+                        blocksNum--;            //updates number of blocks left to win
                     }
-
-                    if (b.collision2(ball,pointTop)) {
-                        ball.setyVelocity(2);
-                    } else if (b.collision2(ball,pointBottom)) {
-                        ball.setyVelocity(-2);
-                    }
-
-                    if (Math.floor(Math.random() * 5) == 0)
-                        setPower(new Power(b.getX() + 15, b.getY() + 15, 30, 30, this));                    
-                   if(power.isGenerated()) 
-                    power.setY( power.getY() + 2);
-                    b.setDestroyed(true); // sets the brick destroyed
-                    scoreSound();
-                    score += 20;
-                    blocksNum--;
                 }
             }
-        }
-        
-        
-        if (counterVidas == 3) {
-            vidas--;
-            counterVidas = 0;
-        }
+            // provides an extra life if 6 bricks are broken and no life has been given already
+            if (score % 120 == 0 && score != 0 && !vidaAsignada) {
+                extraVida = true; //turns the boolean to give the extra life
+            }
+             
+            //checks if extraVida is true
+            if (extraVida) {
+                vidas++;                //adds an extra life
+                extraVida = false;      //modifies extraVida's value to false
+                vidaAsignada = true;    //changes vidaAsignada to true so only one life is given
+            }
 
-        if (score % 120 == 0 && score != 0 && !vidaAsignada) {
-            extraVida = true;
-        }
-
-        if (extraVida) {
-            vidas++;
-            extraVida = false;
-            vidaAsignada = true;
-        }
-
-        if (score % 120 != 0) {
-            vidaAsignada = false;
-        }
+            if (score % 120 != 0) {
+                vidaAsignada = false; // chages vidaAsignada to false so it can be used again next time a life is given
+            }
         }
     }
 
@@ -336,19 +323,19 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height - 50, null); //draws background
-            g.drawImage(Assets.littleBar, 0, height-50, width, 50, null); // draws the wooden bar at the bottom
+            g.drawImage(Assets.littleBar, 0, height - 50, width, 50, null); // draws the wooden bar at the bottom
             bar.render(g);
             ball.render(g);
-            for(int i=0 ; i< brick.size(); i++){
+            for (int i = 0; i < brick.size(); i++) {
                 Bricks b = (Bricks) brick.get(i);
-                if(!b.isDestroyed()){ //in case that the brick is destryoed, it doesnt render
+                if (!b.isDestroyed()) { //in case that the brick is destryoed, it doesnt render
                     b.render(g);
                 }
             }
             g.setFont(new Font("Tahoma", Font.BOLD, 20));
             g.setColor(Color.GREEN);
-            g.drawString("Vidas: " + String.valueOf(vidas), 10, height-10);
-            g.drawString("Score: " + String.valueOf(score), 10, height-30);
+            g.drawString("Vidas: " + String.valueOf(vidas), 10, height - 10);
+            g.drawString("Score: " + String.valueOf(score), 10, height - 30);
             if (!keyManager.isPaused()) {
                 g.drawImage(Assets.pause, 0, 0, width, height, null);
             }
@@ -356,13 +343,14 @@ public class Game implements Runnable {
                 g.drawImage(Assets.gameOver, 0, 0, width, height, null);    // If no more lives are left, displays game over screen
                 Assets.music.stop();                                        // Stops the music
             }
-             if (blocksNum == 0) {
+            if (blocksNum == 0) {
                 g.drawImage(Assets.win, 0, 0, width, height, null);    // If no more lives are left, displays game over screen
                 Assets.music.stop();                                        // Stops the music
             }
-             if (getPower() != null) {
-                if (getPower().isGenerated())
+            if (getPower() != null) {
+                if (getPower().isGenerated()) {
                     getPower().render(g);
+                }
             }
             bs.show();
             g.dispose();
@@ -400,9 +388,9 @@ public class Game implements Runnable {
     }
 
     /**
-     * 
-     * @param strFileName 
-     * Saves the position of the bar and the ball in a text document.
+     *
+     * @param strFileName Saves the position of the bar and the ball in a text
+     * document.
      */
     public void Save(String strFileName) {
 
@@ -415,7 +403,7 @@ public class Game implements Runnable {
             int xVelP = ball.getxVelocity();
             int yVelP = ball.getyVelocity();
             //save player data
-            writer.println("" + vidas + "/" + score + "/" + xP + "/" + yP + "/" + xB + "/" + yB + "/" + xVelP + "/" + yVelP); 
+            writer.println("" + vidas + "/" + score + "/" + xP + "/" + yP + "/" + xB + "/" + yB + "/" + xVelP + "/" + yVelP);
             writer.close();
 
         } catch (IOException ioe) {
