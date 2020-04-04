@@ -425,7 +425,6 @@ public class Game implements Runnable {
                 else{
                     aux = 0;
                 }
-                System.out.println(aux);
               
                 writer.print("" + aux + "/");
             }
@@ -475,7 +474,6 @@ public class Game implements Runnable {
             String datos[];
             line = reader.readLine();
             datos = line.split("/");
-            System.out.println(line);
             
             int cont =0;
             for(int i=0; i<brick.size(); i++){
