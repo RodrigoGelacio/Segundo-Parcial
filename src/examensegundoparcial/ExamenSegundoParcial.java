@@ -10,8 +10,8 @@ package examensegundoparcial;
  * @author Rodrigo
  */
 public class ExamenSegundoParcial {
-    
-/**
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {

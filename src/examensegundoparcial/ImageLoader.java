@@ -5,7 +5,6 @@ package examensegundoparcial;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -17,9 +16,10 @@ import javax.imageio.ImageIO;
  * @author antoniomejorado
  */
 public class ImageLoader {
-    
+
     /**
      * to get an image from the file path
+     *
      * @param path it is the path of the file
      * @return the <bold>BufferedImage</bold> object
      */
@@ -35,4 +35,3 @@ public class ImageLoader {
     }
 
 }
-
