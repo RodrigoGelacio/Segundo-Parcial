@@ -92,7 +92,7 @@ public abstract class Item {
     public boolean collision(Object o){
         boolean bStatus = false;  //assuming not collision
         if(o instanceof Item){
-            Rectangle rThis = new Rectangle(getX(),getY(),getWidth()/2,getHeight()/2); // Made Rectangle smaller so that coin has to touch only the upper part
+            Rectangle rThis = new Rectangle(getX(),getY(),getWidth(),getHeight()); // Made Rectangle smaller so that coin has to touch only the upper part
             Item i = (Item)o;
             Rectangle rOther = new Rectangle(i.getX(),i.getY(),i.getWidth(),i.getHeight());
             bStatus= rThis.contains(rOther);

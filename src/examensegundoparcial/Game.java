@@ -36,6 +36,7 @@ public class Game implements Runnable {
     private LinkedList<Bricks> brick;
     private KeyManager keyManager;  // to manage the keyboard
     private MouseManager mouseManager;
+    private Ball ball;
     private Timer timer;
     private TimerTask task;
     private int score;
@@ -116,9 +117,11 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        bar = new Bar(getWidth() / 2, getHeight() -120, 70, 70, this);
+        //(getWidth() / 2, getHeight() -120, 100, 70, this)
+        bar = new Bar(getWidth() / 2, getHeight() -120, 100, 70, this);
+        ball = new Ball(getWidth() / 2, 50, 30, 30, this);
         brick = new LinkedList<Bricks>();
-        for (int row = 0; row < 6; row++) {
+        for (int row = 0; row < 6; row++) { 
             for (int column = 1; column < 7; column++) {
                 Bricks brickAux = new Bricks(50 * column, row * 50, 50, 50, this);
                 brick.add(brickAux);
@@ -175,6 +178,11 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         bar.tick();
+        ball.tick();
+        /*
+        if(bar.collision(ball)){
+            ball.setyVelocity(-ball.getyVelocity());
+        }*/
         for(Bricks b : brick){
             b.tick();
         }
@@ -215,6 +223,7 @@ public class Game implements Runnable {
             g.drawImage(Assets.background, 0, 0, width, height - 50, null);
             g.drawImage(Assets.littleBar, 0, height-50, width, 50, null);
             bar.render(g);
+            ball.render(g);
             for(Bricks b: brick){
                 b.render(g);
             }
