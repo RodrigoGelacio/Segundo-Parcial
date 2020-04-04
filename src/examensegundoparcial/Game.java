@@ -117,7 +117,6 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        //(getWidth() / 2, getHeight() -120, 100, 70, this)
         bar = new Bar(getWidth() / 2, getHeight() -120, 100, 70, this);
         ball = new Ball(getWidth() / 2, 50, 30, 30, this);
         brick = new LinkedList<Bricks>();
@@ -179,12 +178,11 @@ public class Game implements Runnable {
         keyManager.tick();
         bar.tick();
         ball.tick();
-        /*
         if(bar.collision(ball)){
             ball.setyVelocity(-ball.getyVelocity());
-        }*/
-        for(Bricks b : brick){
-            b.tick();
+        }
+        for(int i=0; i < brick.size();i++){
+            brick.get(i).tick();
         }
         if (counterVidas == 3) {
             vidas--;
