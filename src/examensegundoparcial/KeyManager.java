@@ -49,9 +49,11 @@ public class KeyManager implements KeyListener {
         keys[e.getKeyCode()] = true;
         if (e.getKeyCode() == KeyEvent.VK_G) { //calls the save method if key is equal to 's'
             game.Save("game");
+            game.SaveBricks("b");
         }
         if (e.getKeyCode() == KeyEvent.VK_C) { // calls the load method if 'c' key is pressed
             game.Load("game");
+            game.LoadBricks("b");
         }
     }
 

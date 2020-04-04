@@ -52,19 +52,19 @@ public class Ball extends Item {
 
         //Bouncing in wall
         
-        if(getX()+30 == game.getWidth()){
+        if(getX()+30 >= game.getWidth()){
             xVelocity = -xVelocity;
         }
-        else if(getX() == 0){
+        else if(getX() <= 0){
             xVelocity = -xVelocity;
         }
-        if(getY() + 30 == game.getHeight() - 50){
+        if(getY() + 30 >= game.getHeight() - 50){
             setX(game.getWidth() / 2);
             setY(game.getHeight() / 2);
             xVelocity = 0;
             game.setVidas(game.getVidas() - 1);
         }
-        else if(getY() == 0){
+        else if(getY() <= 0){
             yVelocity = -yVelocity;
         }
 

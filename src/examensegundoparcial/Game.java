@@ -213,7 +213,7 @@ public class Game implements Runnable {
             //modifies the direction of the ball if it lands in the first section of the bar
             if (ballLPos < first) {
 
-                ball.setxVelocity(-2);
+                ball.setxVelocity(-3);
                 ball.setyVelocity(-2);
             }
 
@@ -240,7 +240,7 @@ public class Game implements Runnable {
             
             //modifies the direction of the ball if it lands in the last section of the bar
             if (ballLPos > fourth) {
-                ball.setxVelocity(2);
+                ball.setxVelocity(3);
                 ball.setyVelocity(-2);
             }
             
@@ -398,12 +398,41 @@ public class Game implements Runnable {
             int yB = ball.getY();
             int xVelP = ball.getxVelocity();
             int yVelP = ball.getyVelocity();
+            
             //save player data
             writer.println("" + vidas + "/" + score + "/" + xP + "/" + yP + "/" + xB + "/" + yB + "/" + xVelP + "/" + yVelP); 
             writer.close();
 
         } catch (IOException ioe) {
             System.out.println("File Not found CALL 911");
+        }
+
+    }
+    
+    public void SaveBricks(String strFileName) {
+
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter(strFileName));
+            int aux;
+
+            for(int i=0; i < brick.size(); i++){
+                Bricks b = (Bricks)brick.get(i);
+                boolean status = b.isDestroyed();
+
+                if(status){
+                    aux = 1;
+                }
+                else{
+                    aux = 0;
+                }
+                System.out.println(aux);
+              
+                writer.print("" + aux + "/");
+            }
+            writer.close();
+
+        } catch (IOException ioe) {
+            System.out.println("Saving bricks failed");
         }
 
     }
@@ -416,7 +445,8 @@ public class Game implements Runnable {
             String line;
             String datos[];
             line = reader.readLine();
-            datos = line.split("/");
+            datos = line.split("/");          
+            
             vidas = Integer.parseInt(datos[0]);
             score = Integer.parseInt(datos[1]);
             int xP = Integer.parseInt(datos[2]);
@@ -425,7 +455,6 @@ public class Game implements Runnable {
             int yB = Integer.parseInt(datos[5]);
             int xVelP = Integer.parseInt(datos[6]);
             int yVelP = Integer.parseInt(datos[7]);
-            System.out.println("Se leyo  vidas = " + vidas + " y score = " + score + " y X = " + xP + " y Y = " + yP);
             bar.setX(xP);
             bar.setY(yP);
             ball.setX(xB);
@@ -435,6 +464,35 @@ public class Game implements Runnable {
             reader.close();
         } catch (IOException e) {
             System.out.println("File Not found CALL 911");
+        }
+    }
+    
+    public void LoadBricks(String strFileName) {
+        try {
+            FileReader file = new FileReader(strFileName);
+            BufferedReader reader = new BufferedReader(file);
+            String line;
+            String datos[];
+            line = reader.readLine();
+            datos = line.split("/");
+            System.out.println(line);
+            
+            int cont =0;
+            for(int i=0; i<brick.size(); i++){
+                Bricks b = (Bricks)brick.get(i);
+                int status = Integer.parseInt(datos[cont]);
+                if(status == 1){
+                    b.setDestroyed(true);
+                }
+                else{
+                    b.setDestroyed(false);
+                }
+              cont++;
+            }
+            
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("loading bricks failed");
         }
     }
 
