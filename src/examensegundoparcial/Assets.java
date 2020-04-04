@@ -21,6 +21,7 @@ public class Assets {
     public static BufferedImage littleBar;
     public static BufferedImage pause;
     public static BufferedImage gameOver;
+     public static BufferedImage win;
     public static BufferedImage spriteBasket;
     public static BufferedImage barIdle[];
     public static BufferedImage barRight[];
@@ -45,6 +46,7 @@ public static BufferedImage portal[];
         brick = ImageLoader.loadImage("/images/brick.png");
         pause = ImageLoader.loadImage("/images/pause.jpg");
         gameOver = ImageLoader.loadImage("/images/gameover.jpg");
+        win = ImageLoader.loadImage("/images/Win_1.jpg");
         spriteBat = ImageLoader.loadImage("/images/bat.png");
         Spritesheet spritesheet = new Spritesheet(spriteBat);
         sprite2 = ImageLoader.loadImage("/images/guy.png");
