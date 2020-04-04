@@ -90,6 +90,13 @@ public abstract class Item {
      */
     public abstract void render(Graphics g);
     
+    /**
+     * 
+     * @param o
+     * @return boolean
+     * This method checks the collisio of the bar and the ball, it was modifies to special conditions
+     * in the width and height
+     */
     public boolean collision(Object o){
         boolean bStatus = false;  //assuming not collision
         if(o instanceof Item){
@@ -101,6 +108,12 @@ public abstract class Item {
         return bStatus;
     }
     
+    /**
+     * 
+     * @param o
+     * @return boolean
+     * Normal implementation of collision method, taking by parameter an object
+     */
     public boolean collision3(Object o){
         boolean bStatus = false;  //assuming not collision
         if(o instanceof Item){
@@ -112,6 +125,14 @@ public abstract class Item {
         return bStatus;
     }
     
+    /**
+     * 
+     * @param o
+     * @param point
+     * @return boolean
+     * Special implementation of this method, it is used to check collisions between the 
+     * bricks and the ball
+     */
     public boolean collision2(Object o, Point point){
         boolean bStatus = false;  //assuming not collision
         if(o instanceof Item){

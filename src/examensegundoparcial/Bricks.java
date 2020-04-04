@@ -21,8 +21,8 @@ public class Bricks extends Item {
     private int width;
     private int height;
     private Game game;
-    private Animation personIdle;
-    private boolean destroyed;
+    private Animation personIdle; // saves animation for the bricks
+    private boolean destroyed; // flag that controls if a block has been destroyed
 
     public Bricks(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
@@ -35,11 +35,20 @@ public class Bricks extends Item {
         
     }
     
+    /**
+     * 
+     * @return boolean value destroyed
+     */
     boolean isDestroyed() {
         
         return destroyed;
     }
-
+    
+    /**
+     * 
+     * @param val 
+     * sets destroyed a boolean value
+     */
     void setDestroyed(boolean val) {
         
         destroyed = val;
@@ -74,7 +83,7 @@ public class Bricks extends Item {
      */
     @Override
     public void tick() {
-        personIdle.tick();
+        personIdle.tick(); // updates animation
     }
 
     @Override

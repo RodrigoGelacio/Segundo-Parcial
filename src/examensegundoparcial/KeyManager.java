@@ -15,10 +15,10 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
 
     public boolean paused; // flag pause the game
-    public boolean save;
+    public boolean save; //flag to save game
     public boolean right;
     public boolean left;
-    private Game game;
+    private Game game; // object of the game
 
     private boolean keys[];  // to store all the flags for every key
 
@@ -47,10 +47,10 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         keys[e.getKeyCode()] = true;
-        if (e.getKeyCode() == KeyEvent.VK_G) {
+        if (e.getKeyCode() == KeyEvent.VK_G) { //calls the save method if key is equal to 's'
             game.Save("game");
         }
-        if (e.getKeyCode() == KeyEvent.VK_C) {
+        if (e.getKeyCode() == KeyEvent.VK_C) { // calls the load method if 'c' key is pressed
             game.Load("game");
         }
     }
@@ -64,17 +64,16 @@ public class KeyManager implements KeyListener {
     public void keyReleased(KeyEvent e) {
         // set false to every key released
         keys[e.getKeyCode()] = false;
-        if (e.getKeyCode() == KeyEvent.VK_P) {
+        if (e.getKeyCode() == KeyEvent.VK_P) { // in order to pause and unpause with the same 
             paused = !paused;
         }
 
     }
-
     /**
      * to enable or disable moves on every tick
      */
     public void tick() {
-        left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
+        left = keys[KeyEvent.VK_LEFT];
     }
 }

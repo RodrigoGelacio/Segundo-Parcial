@@ -33,18 +33,15 @@ public class Game implements Runnable {
     private int height;             // height of the window
     private Thread thread;          // thread to create the game
     private boolean running;        // to set the game
-    private Bar bar;                // to use a player
-    private LinkedList<Bricks> brick;
+    private Bar bar;                // to bar of the game
+    private LinkedList<Bricks> brick; //list of blocks in the game
     private KeyManager keyManager;  // to manage the keyboard
-    private MouseManager mouseManager;
-    private Ball ball;
-    private Timer timer;
-    private TimerTask task;
-    private int score;
-    private int vidas;
-    private int counterVidas;
-    private boolean extraVida;
-    private boolean vidaAsignada;
+    private Ball ball; // ball of the game
+    private int score; // score of the game
+    private int vidas; // lives of the game
+    private int counterVidas; //counter of lives
+    private boolean extraVida; //bonus lives
+    private boolean vidaAsignada; 
 
     /**
      * to create title, width and height and set the game is still not running
@@ -59,32 +56,36 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         keyManager = new KeyManager(this);
-        mouseManager = new MouseManager(this);
         score = 0;
         vidas = 5;
         extraVida = false;
         vidaAsignada = false;
     }
-
+    
+    /**
+     * 
+     * @return contador de vidas
+     */
     public int getCounterVidas() {
         return counterVidas;
     }
 
     /**
      *
-     * @return ball
+     * @return bar
      */
     public Bar getBar() {
         return bar;
     }
-
+    
+    /**
+     * 
+     * @return vidas
+     */
     public int getVidas() {
         return vidas;
     }
 
-    public MouseManager getMouseManager() {
-        return mouseManager;
-    }
 
     /**
      * To get the width of the game window
@@ -103,11 +104,21 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
-
+    
+    /**
+     * 
+     * @param vidas 
+     * Modify value of lives
+     */
     public void setVidas(int vidas) {
         this.vidas = vidas;
     }
-
+    
+    /**
+     * 
+     * @param counterVidas
+     * Modify counter of lives
+     */
     public void setCounterVidas(int counterVidas) {
         this.counterVidas = counterVidas;
     }
@@ -121,6 +132,8 @@ public class Game implements Runnable {
         bar = new Bar(getWidth() / 2 - 50, getHeight() -120, 100, 70, this);
         ball = new Ball(getWidth() / 2, 400, 20, 20, this);
         brick = new LinkedList<Bricks>();
+        
+        //loading position of the bricks in the screen
         for (int row = 0; row < 6; row++) { 
             for (int column = 2; column < 8; column++) {
                 Bricks brickAux = new Bricks(50 * column, row * 50, 50, 50, this);
@@ -128,14 +141,13 @@ public class Game implements Runnable {
             }
         }
         display.getJframe().addKeyListener(keyManager);
-        display.getJframe().addMouseListener(mouseManager);
-        display.getJframe().addMouseMotionListener(mouseManager);
-        display.getCanvas().addMouseListener(mouseManager);
-        display.getCanvas().addMouseMotionListener(mouseManager);
         Assets.music.setLooping(true);
         Assets.music.play();
     }
     
+    /**
+     * Method that plays the sound when the ball hits the bar
+     */
     public void pop(){
         Assets.pop.play();
     }
@@ -163,9 +175,8 @@ public class Game implements Runnable {
 
             // if delta is positive we tick the game
             if (delta >= 1) {
-                if (keyManager.isPaused()) {
+                if (keyManager.isPaused()) { //checks if the game is on pause
                         tick();
-                    
                 }
                 render();
                 delta--;
@@ -184,9 +195,10 @@ public class Game implements Runnable {
         keyManager.tick();
         bar.tick();
         ball.tick();
+        
+        //checks if the ball has collisiones with the bar
         if(bar.collision(ball)){
-            ball.setyVelocity(-ball.getyVelocity());
-            pop();
+            pop(); //plays bo sound
             
             int paddleLPos = bar.getX();
             int ballLPos = ball.getX();
@@ -196,30 +208,35 @@ public class Game implements Runnable {
             int third = paddleLPos + 60;
             int fourth = paddleLPos + 80;
             
+            //modifies the direction of the ball if it lands in the first section of the bar
             if (ballLPos < first) {
 
                 ball.setxVelocity(-2);
                 ball.setyVelocity(-2);
             }
 
+            //modifies the direction of the ball if it lands in the second section of the bar
             if (ballLPos >= first && ballLPos < second) {
 
                 ball.setxVelocity(-2);
                 ball.setyVelocity(-2);
             }
-
+            
+            //modifies the direction of the ball if it lands in the third section of the bar
             if (ballLPos >= second && ballLPos < third) {
 
                 ball.setxVelocity(0);
                 ball.setyVelocity(-2);
             }
 
+            //modifies the direction of the ball if it lands in the fourth section of the bar
             if (ballLPos >= third && ballLPos < fourth) {
                 
                 ball.setxVelocity(2);
                 ball.setyVelocity(-2);
             }
-
+            
+            //modifies the direction of the ball if it lands in the last section of the bar
             if (ballLPos > fourth) {
                 ball.setxVelocity(2);
                 ball.setyVelocity(-2);
@@ -227,42 +244,46 @@ public class Game implements Runnable {
             
         }
         
+        //updates the bricks status
         for(int i=0; i < brick.size();i++){
-            Bricks b = (Bricks) brick.get(i);
+            Bricks b = (Bricks) brick.get(i); //saving in a new object in order to function properly
             b.tick();
-            if (b.collision3(ball)) {
-                int ballLeft = ball.getX();
-                int ballHeight = ball.getHeight();
-                int ballWidth = (int) ball.getWidth();
-                int ballTop = (int) ball.getY();
-
+            
+            //checks if the ball has hit a brick
+            if (b.collision3(ball)) { 
+                int ballLeft = ball.getX(); // saves the x value of the ball at all moments
+                int ballHeight = ball.getHeight(); // saves the height of the ball
+                int ballWidth = (int) ball.getWidth(); // saves width of the ball
+                int ballTop = (int) ball.getY(); // saves the y position at all times
+                
+                //creates a Point object for evry corner of the ball
                 Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
                 Point pointLeft = new Point(ballLeft - 1, ballTop);
                 Point pointTop = new Point(ballLeft, ballTop - 1);
                 Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
-
+                
+                //checks if the brick has already been destroyed
                 if (!b.isDestroyed()) {
-
+                    
+                    //Uses a different collisioin to know where has the ball hit the brick
                     if (b.collision2(ball,pointRight)) {
-                        System.out.println("1");
                         ball.setxVelocity(-2);
                     } else if (b.collision2(ball,pointLeft)) {
-                        System.out.println("2");
                         ball.setxVelocity(2);
                     }
 
                     if (b.collision2(ball,pointTop)) {
-                        System.out.println("3");
                         ball.setyVelocity(2);
                     } else if (b.collision2(ball,pointBottom)) {
-                        System.out.println("4");
                         ball.setyVelocity(-2);
                     }
 
-                    b.setDestroyed(true);
+                    b.setDestroyed(true); // sets the brick destroyed
                 }
             }
         }
+        
+        
         if (counterVidas == 3) {
             vidas--;
             counterVidas = 0;
@@ -297,13 +318,13 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
-            g.drawImage(Assets.background, 0, 0, width, height - 50, null);
-            g.drawImage(Assets.littleBar, 0, height-50, width, 50, null);
+            g.drawImage(Assets.background, 0, 0, width, height - 50, null); //draws background
+            g.drawImage(Assets.littleBar, 0, height-50, width, 50, null); // draws the wooden bar at the bottom
             bar.render(g);
             ball.render(g);
             for(int i=0 ; i< brick.size(); i++){
                 Bricks b = (Bricks) brick.get(i);
-                if(!b.isDestroyed()){
+                if(!b.isDestroyed()){ //in case that the brick is destryoed, it doesnt render
                     b.render(g);
                 }
             }
@@ -353,6 +374,11 @@ public class Game implements Runnable {
         }
     }
 
+    /**
+     * 
+     * @param strFileName 
+     * Saves the position of the bar and the ball in a text document.
+     */
     public void Save(String strFileName) {
 
         try {
@@ -371,7 +397,7 @@ public class Game implements Runnable {
 
     }
 
-    //Save Enemies
+    //Load the saved positions of the bar and ball
     public void Load(String strFileName) {
         try {
             FileReader file = new FileReader(strFileName);
