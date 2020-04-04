@@ -58,13 +58,9 @@ public class Bricks extends Item {
      *
      * @param val sets destroyed a boolean value
      */
-<<<<<<< HEAD
-    public void setDestroyed(boolean val) {
         
-=======
-    void setDestroyed(boolean val) {
+    public void setDestroyed(boolean val) {
 
->>>>>>> 1de903ff95b8bce00049e5b44b389fc3bc60ade1
         destroyed = val;
     }
 
