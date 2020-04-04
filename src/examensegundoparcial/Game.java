@@ -260,7 +260,7 @@ public class Game implements Runnable {
                         ball.setyVelocity(-2);
                     }
                     scoreSound();
-                    score += 100;
+                    score += 20;
                     blocksNum--;
                     b.setDestroyed(true);
                 }
@@ -271,7 +271,7 @@ public class Game implements Runnable {
             counterVidas = 0;
         }
 
-        if (score % 50 == 0 && score != 0 && !vidaAsignada) {
+        if (score % 120 == 0 && score != 0 && !vidaAsignada) {
             extraVida = true;
         }
 
@@ -281,7 +281,7 @@ public class Game implements Runnable {
             vidaAsignada = true;
         }
 
-        if (score % 50 != 0) {
+        if (score % 120 != 0) {
             vidaAsignada = false;
         }
         }
