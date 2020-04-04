@@ -185,6 +185,44 @@ public class Game implements Runnable {
         if(bar.collision(ball)){
             ball.setyVelocity(-ball.getyVelocity());
             pop();
+            
+            int paddleLPos = bar.getX();
+            int ballLPos = ball.getX();
+            
+            int first = paddleLPos + 20;
+            int second = paddleLPos + 40;
+            int third = paddleLPos + 60;
+            int fourth = paddleLPos + 80;
+            
+            if (ballLPos < first) {
+
+                ball.setxVelocity(-2);
+                ball.setyVelocity(-2);
+            }
+
+            if (ballLPos >= first && ballLPos < second) {
+
+                ball.setxVelocity(-2);
+                ball.setyVelocity(-2);
+            }
+
+            if (ballLPos >= second && ballLPos < third) {
+
+                ball.setxVelocity(0);
+                ball.setyVelocity(-2);
+            }
+
+            if (ballLPos >= third && ballLPos < fourth) {
+                
+                ball.setxVelocity(2);
+                ball.setyVelocity(-2);
+            }
+
+            if (ballLPos > fourth) {
+                ball.setxVelocity(2);
+                ball.setyVelocity(-2);
+            }
+            
         }
         for(int i=0; i < brick.size();i++){
             brick.get(i).tick();

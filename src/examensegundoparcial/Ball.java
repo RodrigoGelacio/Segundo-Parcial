@@ -49,8 +49,8 @@ public class Ball extends Item {
         // moving player depending on flags and velocity
 
         
-        setX(getX() - xVelocity);
-        setY(getY() - yVelocity);
+        setX(getX() + xVelocity);
+        setY(getY() + yVelocity);
 
         //Bouncing in wall
         
