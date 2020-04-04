@@ -16,13 +16,13 @@ public class Assets {
     public static BufferedImage background;
     public static BufferedImage brick;     // to store the player image
     public static BufferedImage spriteBat;
+    public static BufferedImage power;
     public static BufferedImage sprite;
     public static BufferedImage sprite2;
     public static BufferedImage littleBar;
     public static BufferedImage pause;
     public static BufferedImage gameOver;
-     public static BufferedImage win;
-    public static BufferedImage spriteBasket;
+    public static BufferedImage win;
     public static BufferedImage barIdle[];
     public static BufferedImage barRight[];
     public static BufferedImage barLeft[];
@@ -40,6 +40,7 @@ public static BufferedImage portal[];
         pop = new SoundClip("/sounds/pop.wav");
         music = new SoundClip("/sounds/backSound.wav");
         ball = ImageLoader.loadImage("/images/ball.png");
+        power = ImageLoader.loadImage("/images/Power.png");
         littleBar = ImageLoader.loadImage("/images/littleBar.jpg");
         score = new SoundClip("/sounds/score.wav");
         background = ImageLoader.loadImage("/images/backgroundRocks.jpg");

@@ -42,7 +42,7 @@ public class Game implements Runnable {
     private int counterVidas; //counter of lives
     private boolean extraVida; //bonus lives
     private boolean vidaAsignada; 
-    private MouseManager mouseManager;
+    private Power power;
     private int blocksNum = 36;
 
     /**
@@ -78,6 +78,10 @@ public class Game implements Runnable {
      */
     public Bar getBar() {
         return bar;
+    }
+
+    public Power getPower() {
+        return power;
     }
     
     /**
@@ -123,6 +127,10 @@ public class Game implements Runnable {
      */
     public void setCounterVidas(int counterVidas) {
         this.counterVidas = counterVidas;
+    }
+
+    public void setPower(Power power) {
+        this.power = power;
     }
 
     /**
@@ -280,6 +288,10 @@ public class Game implements Runnable {
                         ball.setyVelocity(-2);
                     }
 
+                    if (Math.floor(Math.random() * 5) == 0)
+                        setPower(new Power(b.getX() + 15, b.getY() + 15, 30, 30, this));                    
+                   if(power.isGenerated()) 
+                    power.setY( power.getY() + 2);
                     b.setDestroyed(true); // sets the brick destroyed
                     scoreSound();
                     score += 20;
@@ -347,6 +359,10 @@ public class Game implements Runnable {
              if (blocksNum == 0) {
                 g.drawImage(Assets.win, 0, 0, width, height, null);    // If no more lives are left, displays game over screen
                 Assets.music.stop();                                        // Stops the music
+            }
+             if (getPower() != null) {
+                if (getPower().isGenerated())
+                    getPower().render(g);
             }
             bs.show();
             g.dispose();
