@@ -16,7 +16,7 @@ public class ExamenSegundoParcial {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Game g = new Game("Juego", 400, 700);
+        Game g = new Game("Juego", 500, 700);
         g.start();
     }
 }

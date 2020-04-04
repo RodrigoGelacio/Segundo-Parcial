@@ -8,6 +8,7 @@ package examensegundoparcial;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -118,10 +119,10 @@ public class Game implements Runnable {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
         bar = new Bar(getWidth() / 2, getHeight() -120, 100, 70, this);
-        ball = new Ball(getWidth() / 2, 50, 30, 30, this);
+        ball = new Ball(getWidth() / 2, 400, 20, 20, this);
         brick = new LinkedList<Bricks>();
         for (int row = 0; row < 6; row++) { 
-            for (int column = 1; column < 7; column++) {
+            for (int column = 2; column < 8; column++) {
                 Bricks brickAux = new Bricks(50 * column, row * 50, 50, 50, this);
                 brick.add(brickAux);
             }
@@ -224,8 +225,42 @@ public class Game implements Runnable {
             }
             
         }
+        
         for(int i=0; i < brick.size();i++){
-            brick.get(i).tick();
+            Bricks b = (Bricks) brick.get(i);
+            b.tick();
+            if (b.collision3(ball)) {
+                int ballLeft = ball.getX();
+                int ballHeight = ball.getHeight();
+                int ballWidth = (int) ball.getWidth();
+                int ballTop = (int) ball.getY();
+
+                Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+                Point pointLeft = new Point(ballLeft - 1, ballTop);
+                Point pointTop = new Point(ballLeft, ballTop - 1);
+                Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
+
+                if (!b.isDestroyed()) {
+
+                    if (b.collision2(ball,pointRight)) {
+                        System.out.println("1");
+                        ball.setxVelocity(-2);
+                    } else if (b.collision2(ball,pointLeft)) {
+                        System.out.println("2");
+                        ball.setxVelocity(2);
+                    }
+
+                    if (b.collision2(ball,pointTop)) {
+                        System.out.println("3");
+                        ball.setyVelocity(2);
+                    } else if (b.collision2(ball,pointBottom)) {
+                        System.out.println("4");
+                        ball.setyVelocity(-2);
+                    }
+
+                    b.setDestroyed(true);
+                }
+            }
         }
         if (counterVidas == 3) {
             vidas--;
@@ -265,8 +300,11 @@ public class Game implements Runnable {
             g.drawImage(Assets.littleBar, 0, height-50, width, 50, null);
             bar.render(g);
             ball.render(g);
-            for(Bricks b: brick){
-                b.render(g);
+            for(int i=0 ; i< brick.size(); i++){
+                Bricks b = (Bricks) brick.get(i);
+                if(!b.isDestroyed()){
+                    b.render(g);
+                }
             }
             g.setFont(new Font("Tahoma", Font.BOLD, 20));
             g.setColor(Color.GREEN);

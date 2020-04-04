@@ -22,6 +22,7 @@ public class Bricks extends Item {
     private int height;
     private Game game;
     private Animation personIdle;
+    private boolean destroyed;
 
     public Bricks(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
@@ -30,9 +31,20 @@ public class Bricks extends Item {
         this.height = height;
         this.game = game;
         this.personIdle = new Animation(Assets.personIdle, 100);
+        destroyed = false;
         
     }
+    
+    boolean isDestroyed() {
+        
+        return destroyed;
+    }
 
+    void setDestroyed(boolean val) {
+        
+        destroyed = val;
+    }
+    
     public int getDirection() {
         return direction;
     }

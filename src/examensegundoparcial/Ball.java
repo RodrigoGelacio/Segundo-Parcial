@@ -42,8 +42,6 @@ public class Ball extends Item {
         this.yVelocity = yVelocity;
     }
 
-    
-    
     @Override
     public void tick() {
         // moving player depending on flags and velocity

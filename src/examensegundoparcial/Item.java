@@ -8,6 +8,7 @@ package examensegundoparcial;
 
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 /**
@@ -96,6 +97,28 @@ public abstract class Item {
             Item i = (Item)o;
             Rectangle rOther = new Rectangle(i.getX(),i.getY(),i.getWidth(),i.getHeight());
             bStatus= rThis.contains(rOther);
+        }
+        return bStatus;
+    }
+    
+    public boolean collision3(Object o){
+        boolean bStatus = false;  //assuming not collision
+        if(o instanceof Item){
+            Rectangle rThis = new Rectangle(getX(),getY(),getWidth(),getHeight()); // Made Rectangle smaller so that coin has to touch only the upper part
+            Item i = (Item)o;
+            Rectangle rOther = new Rectangle(i.getX(),i.getY(),i.getWidth(),i.getHeight());
+            bStatus= rThis.contains(rOther);
+        }
+        return bStatus;
+    }
+    
+    public boolean collision2(Object o, Point point){
+        boolean bStatus = false;  //assuming not collision
+        if(o instanceof Item){
+            Rectangle rThis = new Rectangle(getX(),getY(),getWidth(),getHeight()); // Made Rectangle smaller so that coin has to touch only the upper part
+            Item i = (Item)o;
+            Rectangle rOther = new Rectangle(i.getX(),i.getY(),i.getWidth(),i.getHeight());
+            bStatus= rThis.contains(point);
         }
         return bStatus;
     }
